@@ -1,0 +1,49 @@
+import nodemailer, { Transporter } from 'nodemailer';
+import aws from 'aws-sdk';
+import { injectable, inject } from 'tsyringe';
+import mailConfig from '@config/mail';
+
+import IMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/models/IMailTemplateProvider';
+import IMailProvider from '../model/IMailProvider';
+import ISendMailDTO from '../dtos/ISendMailDTO';
+
+@injectable()
+export default class SESMailProvider implements IMailProvider {
+  private client: Transporter;
+
+  constructor(
+    @inject('MailTemplateProvider')
+    private mailTemplateProvider: IMailTemplateProvider
+  ) {
+    this.client = nodemailer.createTransport({
+      SES: new aws.SES({
+        apiVersion: '2010-12-01',
+        region: 'us-east-1', // fica tambem na aws Ex: us-east-1
+      }),
+    });
+  }
+
+  public async sendMail({
+    to,
+    from,
+    subject,
+    templateData,
+  }: ISendMailDTO): Promise<void> {
+    const { emailTest, name } = mailConfig.defaults.from;
+
+    await this.client.sendMail({
+      from: {
+        name: from?.name || name,
+        address: from?.email || emailTest, // é para eu colocar o email em vez do emailTest, quando eu ticer tudo certinho na aws
+      },
+      to: {
+        name: to.name,
+        address: to.email,
+      },
+      subject,
+      html: await this.mailTemplateProvider.parse(templateData),
+    });
+
+    // console.log('funcionou');
+  }
+}
