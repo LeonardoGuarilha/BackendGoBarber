@@ -30,10 +30,11 @@ export default function ensureAuthenticated(
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 
-    // console.log(decoded);
+    // console.log(decoded); tenho o iat, exp e o sub
     // Tudo que eu incluir no request e no response será passado para as próxiamas rotas executadas depois desse middleware
     // Incluo a informação do usuário logado para os próximos middlewares
-    const { sub } = decoded as ITokenPayload; // digo que o tipo desse decoded é TokenPayload
+    const { sub } = decoded as ITokenPayload; // digo que o tipo desse decoded é TokenPayload, pq o decoded pode ser uma string ou obketo, nesse caso,
+    // eu forço o decided a ser um ITokenPayload
     request.user = {
       id: sub,
     };

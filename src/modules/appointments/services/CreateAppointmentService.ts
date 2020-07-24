@@ -1,5 +1,6 @@
 // O service será a minha regra de negócio
 // Nesse service, teremos somente a regra de negócio para a criação do Appointment
+// Sempre temos somente um método por service
 import { startOfHour, isBefore, getHours, format } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';

@@ -32,7 +32,7 @@ usersRouter.patch(
   '/avatar',
   ensureAuthenticated,
   upload.single('avatar'), // dentro do single eu coloco qual o nome do campo que vai conter a imagem quando eu chamar essa rota
-  // Coloco esse nome "avatar" também no Multpart from no insomnia
+  // Coloco esse nome "avatar" também no Multpart from no insomnia  console.log(request.file)
   userAvatarController.update
 );
 

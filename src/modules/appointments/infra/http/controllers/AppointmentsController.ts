@@ -6,7 +6,7 @@ import CreateAppointmentService from '@modules/appointments/services/CreateAppoi
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
     // Pego o usuário logado
-    const user_id = request.user.id;
+    const user_id = request.user.id; // Passo o Id do usuário logado no ensureAuthenticate
     // Tudo que é regra de negócio, eu passei para o CreateAppointmentService
     const { provider_id, date } = request.body;
 
